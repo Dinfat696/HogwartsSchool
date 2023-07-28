@@ -41,5 +41,6 @@ public class FacultyService {
         return facultyRepository.getFaculByColor(color);
 
     }
+
 }
 

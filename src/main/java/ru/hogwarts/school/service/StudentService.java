@@ -43,5 +43,4 @@ public class StudentService {
         return studentRepository.findByAge(age);
 
     }
-
 }
