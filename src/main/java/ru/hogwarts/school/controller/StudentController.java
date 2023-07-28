@@ -8,6 +8,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 @RequestMapping("student")
@@ -28,7 +29,7 @@ public class StudentController {
             return ResponseEntity.notFound().build();
 
         }
-        return ResponseEntity.ok(student);
+        return ResponseEntity.ok(studentService.findStudent(id));
     }
 
     @GetMapping
@@ -37,8 +38,11 @@ public class StudentController {
     }
 
     @PostMapping
-    public Student craeteStudent(@RequestBody Student student) {
-        return studentService.crateStudent(student);
+    public ResponseEntity<Student> craeteStudent(@RequestBody Student student) {
+        if (student.getAge() > 0) {
+            return ResponseEntity.ok(studentService.crateStudent(student));
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @PutMapping
@@ -59,8 +63,10 @@ public class StudentController {
 
     @GetMapping("age/{age}")
     public ResponseEntity<Collection<Student>> getStudentByAge(@PathVariable int age) {
-        Collection<Student> students = studentService.getStudentByAge(age);
-        return ResponseEntity.ok(students);
+        if (age > 0) {
+            return ResponseEntity.ok(studentService.getStudentByAge(age));
+        }
+        return ResponseEntity.ok(Collections.emptyList());
 
     }
 }
