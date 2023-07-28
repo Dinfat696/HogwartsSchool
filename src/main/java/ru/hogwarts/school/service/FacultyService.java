@@ -3,9 +3,11 @@ package ru.hogwarts.school.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.FacultyRepository;
 
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 @Service
 public class FacultyService {
@@ -40,6 +42,19 @@ public class FacultyService {
     public Collection<Faculty> getFacultiesByColor(String color) {
         return facultyRepository.getFaculByColor(color);
 
+    }
+
+    public Collection<Faculty> getFacultiesByNameOrColor(String searchString) {
+        return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(searchString, searchString);
+    }
+
+
+    public Collection<Student> getFacultyStudents(Long facultyId) {
+        Faculty faculty = facultyRepository.findFacultyById(facultyId);
+        if (faculty == null) {
+            throw new NoSuchElementException("Факультет не найден");
+        }
+        return faculty.getStudents();
     }
 
 }
